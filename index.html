@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Stop Work Shop Supply Store: Workshop Supplies for MTB &amp; Motorcycle Bays</title>
+<meta name="description" content="Rim tape, cleaning supplies, tyre sealants and workshop essentials in retail and bulk sizes - one supplier for MTB and motorcycle workshops.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* =========================================================================
+   ONE STOP WORK SHOP SUPPLY STORE - DESIGN SYSTEM
+   Ink (off-black) + acid green, on a workshop off-white paper.
+   Type: Space Grotesk (display/headers) + Inter (body/UI)
+   ========================================================================= */
+
+:root {
+  --ink: #14171a;          /* off-black, slight blue-green undertone */
+  --ink-soft: #1e2226;
+  --ink-line: #2c3136;
+  --green: #a6e600;        /* bright acid-lime green, primary accent */
+  --green-deep: #4f7a00;   /* darker green for text on light backgrounds */
+  --green-dim: #dff4a8;    /* pale green tint for backgrounds/badges */
+  --paper: #f5f6f1;        /* off-white workshop paper */
+  --paper-dim: #eceee6;
+  --white: #ffffff;
+  --steel: #6b7178;
+  --steel-dark: #454a4f;
+  --warn: #ffb020;
+  --radius-s: 3px;
+  --radius-m: 6px;
+  --shadow-card: 0 1px 0 rgba(20, 23, 26, 0.06);
+  --maxw: 1240px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .display {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-weight: 700;
+  line-height: 1.12;
+  margin: 0 0 0.5em;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+h1 { font-size: clamp(2.1rem, 5vw, 3.6rem); }
+h2 { font-size: clamp(1.6rem, 3.4vw, 2.4rem); }
+h3 { font-size: 1.25rem; }
+p { margin: 0 0 1em; max-width: 62ch; }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 2px;
+}
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-s);
+  padding: 13px 22px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
+  line-height: 1;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--green); color: var(--ink); border-color: var(--green); }
+.btn-primary:hover { background: #b9fb14; border-color: #b9fb14; }
+.btn-dark { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.btn-dark:hover { background: var(--ink-soft); }
+.btn-outline { background: transparent; color: var(--ink); border-color: var(--ink); }
+.btn-outline:hover { border-color: var(--green-deep); color: var(--green-deep); }
+.btn-outline-light { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.5); }
+.btn-outline-light:hover { border-color: var(--green); color: var(--green); }
+.btn-block { width: 100%; }
+.btn-sm { padding: 8px 14px; font-size: 0.85rem; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---------- Header / Nav ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--ink);
+  border-bottom: 1px solid var(--ink-line);
+}
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  gap: 20px;
+}
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--white);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+.brand .brand-mark { color: var(--green); }
+.brand small { font-weight: 400; font-size: 0.65rem; color: var(--steel); display: block; letter-spacing: 0.02em; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-links a {
+  color: #cfd3d6;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--white); border-color: var(--green); }
+
+.nav-right { display: flex; align-items: center; gap: 14px; }
+
+.cart-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius-s);
+}
+.cart-link:hover { border-color: var(--green); }
+.cart-badge {
+  background: var(--green);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius-s);
+  color: var(--white);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .nav-toggle { display: inline-flex; }
+  .nav-links {
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: var(--ink);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    border-bottom: 1px solid var(--ink-line);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+  .nav-links.open { max-height: 420px; }
+  .nav-links li { width: 100%; }
+  .nav-links a { display: block; padding: 14px 20px; border-bottom: 1px solid var(--ink-line); border-left: 3px solid transparent; }
+  .nav-links a:hover, .nav-links a.active { border-left-color: var(--green); border-bottom-color: var(--ink-line); }
+  .site-header { position: sticky; }
+  .nav-bar { position: relative; flex-wrap: wrap; }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  background: var(--ink);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+  background-image: radial-gradient(circle, rgba(166,230,0,0.16) 1.4px, transparent 1.4px);
+  background-size: 22px 22px;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20,23,26,0.15) 0%, var(--ink) 92%);
+}
+.hero-inner {
+  position: relative;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 76px 20px 64px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+}
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; padding: 48px 20px 40px; }
+}
+.hero-tag {
+  display: inline-block;
+  color: var(--green);
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid var(--ink-line);
+  border-radius: 999px;
+  padding: 6px 14px;
+  margin-bottom: 18px;
+}
+.hero h1 { color: var(--white); margin-bottom: 0.4em; }
+.hero h1 .accent { color: var(--green); }
+.hero p.lead { color: #c7ccd0; font-size: 1.08rem; max-width: 46ch; }
+.hero-ctas { display: flex; gap: 14px; margin-top: 26px; flex-wrap: wrap; }
+.hero-stats { display: flex; gap: 28px; margin-top: 40px; flex-wrap: wrap; }
+.hero-stat b { display: block; font-family: "Space Grotesk", sans-serif; font-size: 1.7rem; color: var(--green); }
+.hero-stat span { color: var(--steel); font-size: 0.82rem; }
+
+.hero-visual {
+  background: var(--ink-soft);
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  aspect-ratio: 5 / 4;
+}
+.hero-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- Section scaffolding ---------- */
+.section { padding: 64px 0; }
+.section-tight { padding: 40px 0; }
+.section-dark { background: var(--ink); color: var(--white); }
+.section-dark p { color: #c7ccd0; }
+.section-dark h2 { color: var(--white); }
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 34px;
+  flex-wrap: wrap;
+}
+.section-head p { margin: 0; color: var(--steel); }
+
+/* ---------- Category cards ---------- */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+@media (max-width: 980px) { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .cat-grid { grid-template-columns: 1fr; } }
+
+.cat-card {
+  display: block;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid var(--paper-dim);
+  border-radius: var(--radius-m);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  position: relative;
+}
+.cat-card:hover { border-color: var(--green); transform: translateY(-2px); }
+.cat-card .cat-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-s);
+  background: var(--green-dim);
+  color: var(--green-deep);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+.cat-card h3 { margin-bottom: 6px; }
+.cat-card p { color: var(--steel); font-size: 0.92rem; margin-bottom: 12px; }
+.cat-card .cat-count { font-size: 0.8rem; color: var(--green-deep); font-weight: 600; }
+
+/* ---------- Product grid & cards ---------- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+@media (max-width: 1080px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 760px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .product-grid { grid-template-columns: 1fr 1fr; gap: 12px; } }
+
+.product-card {
+  background: var(--white);
+  border: 1px solid var(--paper-dim);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.product-card:hover { border-color: var(--green); transform: translateY(-2px); }
+.product-thumb {
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-soft) 100%);
+  background-image: radial-gradient(circle, rgba(166,230,0,0.14) 1px, transparent 1px), linear-gradient(135deg, var(--ink) 0%, var(--ink-soft) 100%);
+  background-size: 16px 16px, cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-align: center;
+  padding: 10px;
+  position: relative;
+}
+.product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.badge {
+  position: absolute;
+  top: 10px; left: 10px;
+  background: var(--green);
+  color: var(--ink);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+}
+.badge.badge-bulk { background: var(--warn); }
+.product-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.product-cat-label { font-size: 0.72rem; color: var(--green-deep); font-weight: 600; }
+.product-body h3 { font-size: 0.98rem; margin-bottom: 2px; line-height: 1.3; }
+.product-short { color: var(--steel); font-size: 0.84rem; margin-bottom: 8px; flex: 1; }
+.product-price-row { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.product-price { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.05rem; }
+.product-unit { color: var(--steel); font-size: 0.76rem; }
+
+/* ---------- Filters (shop page) ---------- */
+.shop-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+@media (max-width: 860px) { .shop-layout { grid-template-columns: 1fr; } }
+
+.filters {
+  background: var(--white);
+  border: 1px solid var(--paper-dim);
+  border-radius: var(--radius-m);
+  padding: 20px;
+  position: sticky;
+  top: 90px;
+}
+@media (max-width: 860px) { .filters { position: static; } }
+.filters h4 { font-size: 0.78rem; text-transform: none; color: var(--steel); font-weight: 700; margin: 0 0 10px; }
+.filter-group { margin-bottom: 22px; }
+.filter-group:last-child { margin-bottom: 0; }
+.filter-option { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; font-size: 0.9rem; cursor: pointer; }
+.filter-option input { accent-color: var(--green-deep); width: 16px; height: 16px; }
+.price-inputs { display: flex; gap: 8px; align-items: center; }
+.price-inputs input { width: 100%; padding: 8px; border: 1px solid var(--paper-dim); border-radius: var(--radius-s); font-size: 0.85rem; }
+select, input[type=text], input[type=email], input[type=tel], textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 11px 12px;
+  border: 1px solid #d7dad2;
+  border-radius: var(--radius-s);
+  background: var(--white);
+  color: var(--ink);
+  width: 100%;
+}
+select:focus, input:focus, textarea:focus { outline: 2px solid var(--green); border-color: var(--green); }
+
+.shop-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
+.shop-toolbar .result-count { color: var(--steel); font-size: 0.88rem; }
+.shop-toolbar select { width: auto; }
+.empty-state { padding: 60px 20px; text-align: center; color: var(--steel); }
+.empty-state h3 { color: var(--ink); }
+
+/* ---------- Product detail ---------- */
+.product-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 44px;
+  align-items: start;
+}
+@media (max-width: 860px) { .product-detail { grid-template-columns: 1fr; gap: 28px; } }
+.pd-image {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-m);
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-soft) 100%);
+  background-image: radial-gradient(circle, rgba(166,230,0,0.14) 1.4px, transparent 1.4px), linear-gradient(135deg, var(--ink) 0%, var(--ink-soft) 100%);
+  background-size: 20px 20px, cover;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--green);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  text-align: center;
+  padding: 30px;
+  position: sticky;
+  top: 90px;
+}
+.pd-image img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-m); }
+.pd-crumb { font-size: 0.82rem; color: var(--steel); margin-bottom: 14px; }
+.pd-crumb a { color: var(--green-deep); text-decoration: none; }
+.pd-price { font-family: "Space Grotesk", sans-serif; font-size: 2rem; font-weight: 700; margin: 14px 0 4px; }
+.pd-unit { color: var(--steel); margin-bottom: 20px; }
+.qty-row { display: flex; align-items: center; gap: 14px; margin: 20px 0; }
+.qty-control { display: flex; align-items: center; border: 1px solid #d7dad2; border-radius: var(--radius-s); }
+.qty-control button { border: none; background: var(--paper-dim); width: 40px; height: 44px; font-size: 1.1rem; cursor: pointer; }
+.qty-control input { width: 52px; text-align: center; border: none; padding: 0; height: 44px; }
+.pd-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+.pd-specs { margin-top: 30px; border-top: 1px solid var(--paper-dim); padding-top: 22px; }
+.pd-specs ul { list-style: none; padding: 0; margin: 0; }
+.pd-specs li { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--paper-dim); font-size: 0.9rem; }
+.pd-specs li span:first-child { color: var(--steel); }
+.added-toast {
+  display: none;
+  margin-top: 14px;
+  background: var(--green-dim);
+  color: var(--green-deep);
+  border-radius: var(--radius-s);
+  padding: 12px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.added-toast.show { display: block; }
+
+/* ---------- Reviews ---------- */
+.review-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+@media (max-width: 760px) { .review-grid { grid-template-columns: 1fr; } }
+.review-card {
+  background: var(--white);
+  border: 1px solid var(--paper-dim);
+  border-radius: var(--radius-m);
+  padding: 22px;
+}
+.stars { color: var(--green-deep); font-size: 0.95rem; margin-bottom: 10px; letter-spacing: 2px; }
+.review-card p { color: var(--ink); font-size: 0.95rem; }
+.review-who { font-size: 0.84rem; color: var(--steel); margin-top: 10px; }
+.review-who b { color: var(--ink); }
+
+/* ---------- Stores strip ---------- */
+.store-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.store-chip {
+  background: var(--ink-soft);
+  border: 1px solid var(--ink-line);
+  color: var(--white);
+  padding: 12px 18px;
+  border-radius: var(--radius-s);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+/* ---------- Cart page ---------- */
+.cart-table { width: 100%; border-collapse: collapse; }
+.cart-table th { text-align: left; font-size: 0.78rem; color: var(--steel); font-weight: 700; padding-bottom: 12px; border-bottom: 1px solid var(--paper-dim); }
+.cart-table td { padding: 16px 0; border-bottom: 1px solid var(--paper-dim); vertical-align: middle; }
+.cart-item-info { display: flex; align-items: center; gap: 14px; }
+.cart-thumb { width: 58px; height: 58px; border-radius: var(--radius-s); background: var(--ink); flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--green); font-size: 0.6rem; font-weight: 700; overflow: hidden; }
+.cart-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.cart-item-name { font-weight: 600; font-size: 0.94rem; }
+.cart-item-unit { color: var(--steel); font-size: 0.8rem; }
+.remove-link { color: var(--steel); font-size: 0.82rem; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+.remove-link:hover { color: #c0392b; }
+.cart-summary {
+  background: var(--white);
+  border: 1px solid var(--paper-dim);
+  border-radius: var(--radius-m);
+  padding: 24px;
+  position: sticky;
+  top: 90px;
+}
+.summary-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.94rem; }
+.summary-row.total { font-weight: 700; font-size: 1.15rem; border-top: 1px solid var(--paper-dim); margin-top: 8px; padding-top: 14px; }
+.cart-layout { display: grid; grid-template-columns: 1fr 320px; gap: 32px; align-items: start; }
+@media (max-width: 860px) { .cart-layout { grid-template-columns: 1fr; } }
+
+/* ---------- Checkout ---------- */
+.checkout-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
+@media (max-width: 900px) { .checkout-layout { grid-template-columns: 1fr; } }
+.field-row { margin-bottom: 16px; }
+.field-row label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+.field-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 520px) { .field-two { grid-template-columns: 1fr; } }
+.order-box {
+  background: var(--white);
+  border: 1px solid var(--paper-dim);
+  border-radius: var(--radius-m);
+  padding: 22px;
+}
+.order-line { display: flex; justify-content: space-between; font-size: 0.9rem; padding: 8px 0; border-bottom: 1px solid var(--paper-dim); }
+.confirm-box {
+  display: none;
+  background: var(--ink);
+  color: var(--white);
+  border-radius: var(--radius-m);
+  padding: 40px 30px;
+  text-align: center;
+}
+.confirm-box.show { display: block; }
+.confirm-box .order-number { font-family: "Space Grotesk", sans-serif; color: var(--green); font-size: 1.8rem; margin: 12px 0; }
+.form-note { font-size: 0.82rem; color: var(--steel); margin-top: 10px; }
+
+/* ---------- About / Testing pages ---------- */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: center; }
+@media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+.stat-block { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
+@media (max-width: 620px) { .stat-block { grid-template-columns: 1fr; } }
+.stat-block div { border-top: 3px solid var(--green); padding-top: 12px; }
+.stat-block b { display: block; font-family: "Space Grotesk", sans-serif; font-size: 2rem; }
+.stat-block span { color: var(--steel); font-size: 0.85rem; }
+
+.process-list { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+.process-list li {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 18px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--paper-dim);
+}
+.process-list li:before {
+  counter-increment: step;
+  content: counter(step);
+  width: 40px; height: 40px;
+  background: var(--ink);
+  color: var(--green);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+}
+.process-list h4 { margin-bottom: 4px; }
+.process-list p { margin: 0; color: var(--steel); font-size: 0.92rem; }
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--ink); color: #c7ccd0; padding: 56px 0 26px; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; }
+@media (max-width: 760px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
+.site-footer h4 { color: var(--white); font-size: 0.85rem; margin-bottom: 14px; }
+.site-footer ul { list-style: none; margin: 0; padding: 0; }
+.site-footer li { margin-bottom: 9px; }
+.site-footer a { color: #aeb4b9; text-decoration: none; font-size: 0.9rem; }
+.site-footer a:hover { color: var(--green); }
+.footer-bottom { border-top: 1px solid var(--ink-line); margin-top: 40px; padding-top: 22px; font-size: 0.82rem; color: var(--steel); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+/* ---------- Page header (inner pages) ---------- */
+.page-header { background: var(--ink); color: var(--white); padding: 44px 0; }
+.page-header p { color: #c7ccd0; max-width: 60ch; }
+
+/* ---------- Utility ---------- */
+.center { text-align: center; }
+.mt-0 { margin-top: 0; }
+.small-note { font-size: 0.82rem; color: var(--steel); }
+.tag-list { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 0; }
+.tag { background: var(--paper-dim); color: var(--steel-dark); font-size: 0.78rem; padding: 5px 11px; border-radius: 999px; }
+
+
+/* ---------- Testing page number badges ---------- */
+.testing-num {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+.testing-highlight {
+  background: var(--white);
+  border: 1px solid var(--paper-dim);
+  border-radius: var(--radius-m);
+  padding: 30px;
+  text-align: center;
+}
+.testing-highlight b {
+  display: block;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 3rem;
+  color: var(--green-deep);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.testing-highlight span { color: var(--steel); font-size: 0.92rem; }
+.check-list { list-style: none; margin: 20px 0 0; padding: 0; }
+.check-list li { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.08); }
+.check-list li:first-child { border-top: none; }
+.check-list .check-mark { color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+</style>
+</head>
+<body>
+
+<!--
+  ONE STOP WORK SHOP SUPPLY STORE - single-file build
+  This whole site (home, shop, product pages, cart, checkout, order
+  history, about, product testing) lives in this one HTML file and is
+  navigated with no page reloads. Before you publish it:
+   1. Search for SITE_CONFIG below and set your real order email.
+   2. Set SITE_CONFIG.supabaseUrl and supabaseAnonKey to turn on order
+      history (see the setup steps provided alongside this file).
+   3. Search for  image:  on any product to add/replace a real photo URL.
+      Rim Tapes & Tapes and Cleaning Supplies currently share ONE
+      placeholder photo each across all 10 products in that collection,
+      just so you can see the layout with real images. Give every
+      product its own photo before this goes live. These placeholder
+      images (and the hero banner image) are temporary links that
+      expire Oct 13, 2026, replace them with permanently hosted URLs.
+   4. All prices and the reviews / stores-we-supply list are
+      placeholders - update before this goes live.
+   This file loads the Supabase JS client and jsPDF from public CDNs,
+   so it needs an internet connection to run (same as the Google Fonts).
+-->
+
+<div id="site-header-mount"></div>
+<main id="view"></main>
+<div id="site-footer-mount"></div>
+
+<script>
+/* =========================================================================
+   ONE STOP WORK SHOP SUPPLY STORE - SITE DATA
+   -------------------------------------------------------------------------
+   Edit everything in this file to update products, prices, reviews and the
+   "stores we supply" list. No other file needs to change.
+
+   IMPORTANT BEFORE LAUNCH:
+   1. SITE_CONFIG.businessEmail  -> set this to your real order inbox.
+   2. SITE_CONFIG.supabaseUrl and SITE_CONFIG.supabaseAnonKey -> set these
+      to turn on order history. Until both are filled in, checkout still
+      works and still generates a downloadable invoice, it just can't save
+      the order for later lookup. See the setup steps you were given
+      alongside this file for the exact Supabase project settings needed.
+   3. Every product has "image": "". Drop in your real photo URL between
+      the quotes once you're happy with the layout and we'll swap them in.
+   4. PRICES ARE PLACEHOLDERS for layout purposes. Update every price
+      before this goes live.
+   5. REVIEWS and STORES_SUPPLIED are placeholder examples. Replace with
+      real customer names/quotes and real client store names (with their
+      permission) before publishing.
+   ========================================================================= */
+
+const SITE_CONFIG = {
+  businessName: "One Stop Work Shop Supply Store",
+  businessEmail: "orders@yourdomain.co.za",   // <-- set your real inbox
+  supabaseUrl: "",                             // <-- paste your Supabase project URL
+  supabaseAnonKey: "",                         // <-- paste your Supabase anon public key
+  currencySymbol: "R",
+  whatsapp: "27000000000",                     // <-- optional, digits only, country code first
+  location: "Durban, South Africa",
+  freeDeliveryThreshold: 1500
+};
+
+const CATEGORIES = [
+  {
+    slug: "rim-tapes",
+    name: "Rim Tapes & Tapes",
+    tagline: "Tubeless-ready tape in every width, plus the tools to fit it right the first time.",
+    icon: "tape"
+  },
+  {
+    slug: "cleaning-supplies",
+    name: "Cleaning Supplies",
+    tagline: "Degreasers, washes and consumables in retail sizes and workshop bulk.",
+    icon: "spray"
+  },
+  {
+    slug: "tyre-sealants",
+    name: "Tyre Sealants",
+    tagline: "Puncture protection from single-bottle top-ups to drum refills for the floor.",
+    icon: "drop"
+  },
+  {
+    slug: "essentials",
+    name: "The Essentials",
+    tagline: "The gloves, lube, rags and small tools every bay reaches for daily.",
+    icon: "wrench"
+  }
+];
+
+/* price in ZAR (rand), numeric. unit = what one "each" represents. */
+const PRODUCTS = [
+
+  /* ============================ RIM TAPES & TAPES ============================ */
+  {
+    id: "p01", category: "rim-tapes", name: "Tubeless Rim Tape 21mm x 10m",
+    price: 129, unit: "roll", badge: "Retail",
+    short: "Narrow-width tape for cross-country and gravel rims.",
+    description: "A 21mm wide tubeless rim tape built for narrow cross-country and gravel rims. Reinforced adhesive backing seals spoke holes and rim beds cleanly, holding pressure without lifting at the edges. Fits most 18–20mm internal-width rims with one clean layer.",
+    specs: ["Width: 21mm", "Length: 10m per roll", "Fits internal rim width: 18–20mm", "Application: single layer recommended"],
+    image: "https://plain-apac-prod-public.komododecks.com/202609/13/MJpYtHEzDyWEVEdXbPct/image.png"
+  },
+  {
+    id: "p02", category: "rim-tapes", name: "Tubeless Rim Tape 25mm x 10m",
+    price: 139, unit: "roll", badge: "Best Seller",
+    short: "The all-rounder width for most modern trail rims.",
+    description: "Our most requested width. 25mm covers the majority of modern trail and enduro rims (22–25mm internal). Tough enough for tyre lever abuse during changes, with a tack that stays put through temperature swings.",
+    specs: ["Width: 25mm", "Length: 10m per roll", "Fits internal rim width: 22–25mm", "Application: single layer recommended"],
+    image: "https://plain-apac-prod-public.komododecks.com/202609/13/MJpYtHEzDyWEVEdXbPct/image.png"
+  },
+  {
+    id: "p03", category: "rim-tapes", name: "Tubeless Rim Tape 29mm x 10m",
+    price: 149, unit: "roll", badge: "Retail",
+    short: "Wider coverage for plus-size and downhill rims.",
+    description: "A 29mm tape for wider trail, downhill and plus-size rims (26–29mm internal). The extra width means fuller bead-to-bead coverage on rims where a narrower tape leaves the edges exposed to sealant.",
+    specs: ["Width: 29mm", "Length: 10m per roll", "Fits internal rim width: 26–29mm", "Application: single layer recommended"],
+    image: "https://plain-apac-prod-public.komododecks.com/202609/13/MJpYtHEzDyWEVEdXbPct/image.png"
+  },
+  {
+    id: "p04", category: "rim-tapes", name: "Tubeless Rim Tape 33mm x 10m",
+    price: 159, unit: "roll", badge: "Retail",
+    short: "Built for fat bike and wide-format rims.",
+    description: "Sized for fat bike and extra-wide rims (30–33mm internal) where standard tape simply doesn't reach. Same tacky, spoke-hole-sealing adhesive in a wider format so you're not doubling up two rolls.",
+    specs: ["Width: 33mm", "Length: 10m per roll", "Fits internal rim width: 30–33mm", "Application: single layer recommended"],
+    image: "https://plain-apac-prod-public.komododecks.com/202609/13/MJpYtHEzDyWEVEdXbPct/image.png"
+  },
+  {
+    id: "p05", category: "rim-tapes", name: "Tubeless Rim Tape 35mm x 10m",
+    price: 169, unit: "roll", badge: "Retail",
+    short: "The widest option for fat bike and moto off-road rims.",
+    description: "Our widest tape option, sized for fat bike and select off-road motorcycle rim beds. Holds a firm seal across the full channel width so pressure doesn't creep out around the edges over time.",
+    specs: ["Width: 35mm", "Length: 10m per roll", "Fits internal rim width: 32–35mm", "Application: single layer recommended"],
+    image: "https://plain-apac-prod-public.komododecks.com/202609/13/MJpYtHEzDyWEVEdXbPct/image.png"
+  },
+  {
+    id: "p06", category: "rim-tapes", name: "Motorcycle Rim Tape Roll 50mm x 50m",
+    price: 449, unit: "roll", badge: "Bulk",
+    short: "Long-run tape roll sized for motorcycle rim beds.",
+    description: "A 50mm wide, 50m long roll built for motorcycle rim beds, enough tape on one roll to keep a service bay stocked without reordering every few jobs. Withstands the higher pressures and heat cycling motorcycle tyres put through the bead area.",
+    specs: ["Width: 50mm", "Length: 50m per roll", "Use: motorcycle rim protection & sealing", "Good for: approx. 25–30 rim applications"],
+    image: "https://plain-apac-prod-public.komododecks.com/202609/13/MJpYtHEzDyWEVEdXbPct/image.png"
+  },
+  {
+    id: "p07", category: "rim-tapes", name: "Rim Tape Application Tool Kit",
+    price: 249, unit: "kit", badge: "Retail",
+    short: "Roller, squeegee and trim tool for a bubble-free fit.",
+    description: "A dedicated pressure roller, edge squeegee and a hooked trim blade for cutting a clean valve hole without tearing the tape. Turns rim taping from a fiddly hand job into a repeatable two-minute process.",
+    specs: ["Contents: roller, squeegee, trim blade, valve-hole punch", "Use: all rim tape widths", "Material: anodised aluminium body"],
+    image: "https://plain-apac-prod-public.komododecks.com/202609/13/MJpYtHEzDyWEVEdXbPct/image.png"
+  },
+  {
+    id: "p08", category: "rim-tapes", name: "Tubeless Valve Stem Set (Presta 44mm, pack of 4)",
+    price: 189, unit: "pack of 4", badge: "Retail",
+    short: "Alloy tubeless valves with removable cores.",
+    description: "Four alloy tubeless valve stems with a removable core for sealant injection and a rubber base that seats flush against taped rims. Standard 44mm length suits most trail and enduro rim depths.",
+    specs: ["Length: 44mm", "Valve type: Presta, removable core", "Pack size: 4 valves", "Includes: spare o-rings and lock nuts"],
+    image: "https://plain-apac-prod-public.komododecks.com/202609/13/MJpYtHEzDyWEVEdXbPct/image.png"
+  },
+  {
+    id: "p09", category: "rim-tapes", name: "Tubeless Valve Core Remover Tool",
+    price: 45, unit: "each", badge: "Retail",
+    short: "Small tool for topping up sealant without removing the tyre.",
+    description: "A compact valve core removal tool that lives on a keyring or in a top-tube bag. Lets you pull the core to top up sealant or clear a clogged valve without breaking the tyre bead.",
+    specs: ["Fits: standard Presta valve cores", "Material: CNC alloy", "Size: keyring-compatible"],
+    image: "https://plain-apac-prod-public.komododecks.com/202609/13/MJpYtHEzDyWEVEdXbPct/image.png"
+  },
+  {
+    id: "p10", category: "rim-tapes", name: "Bulk Rim Tape Roll 25mm x 50m (Workshop Pack)",
+    price: 519, unit: "roll", badge: "Bulk",
+    short: "The 25mm best-seller in a 50m workshop roll.",
+    description: "The same 25mm tape as our retail roll, spooled onto a 50m workshop roll so your service counter isn't cutting a fresh retail roll for every build. Works out to a meaningfully lower cost per rim than five retail rolls.",
+    specs: ["Width: 25mm", "Length: 50m per roll", "Fits internal rim width: 22–25mm", "Good for: approx. 20–25 rim applications"],
+    image: "https://plain-apac-prod-public.komododecks.com/202609/13/MJpYtHEzDyWEVEdXbPct/image.png"
+  },
+
+  /* ============================ CLEANING SUPPLIES ============================ */
+  {
+    id: "p11", category: "cleaning-supplies", name: "Bio-Degreaser Concentrate 5L",
+    price: 399, unit: "5L", badge: "Bulk",
+    short: "Biodegradable degreaser concentrate, dilutes down for daily use.",
+    description: "A biodegradable degreaser concentrate for drivetrains, cassettes and engine casings. Dilutes with water so one 5L container makes considerably more ready-to-use fluid. It's the standard refill for a busy wash bay.",
+    specs: ["Volume: 5L concentrate", "Dilution: mixes with water (see label ratio)", "Biodegradable formula", "Use: drivetrain, frame & engine casing degreasing"],
+    image: "https://duramaid.co.za/cdn/shop/files/HydrosanMaxikleen5L.jpg?v=1752560825&width=2048"
+  },
+  {
+    id: "p12", category: "cleaning-supplies", name: "Bio-Degreaser Concentrate 20L Drum",
+    price: 1349, unit: "20L drum", badge: "Bulk",
+    short: "Floor-stock degreaser drum for high-volume workshops.",
+    description: "The same biodegradable degreaser in a 20L drum for workshops running a dedicated parts-wash station or a high daily service volume. Refill smaller spray bottles from the drum to cut packaging waste and per-litre cost.",
+    specs: ["Volume: 20L drum", "Dilution: mixes with water (see label ratio)", "Biodegradable formula", "Best for: parts-wash stations, high daily throughput"],
+    image: "https://duramaid.co.za/cdn/shop/files/HydrosanMaxikleen5L.jpg?v=1752560825&width=2048"
+  },
+  {
+    id: "p13", category: "cleaning-supplies", name: "Citrus Chain & Drivetrain Cleaner 5L",
+    price: 429, unit: "5L", badge: "Bulk",
+    short: "Fast-acting citrus solvent for chains, cassettes and derailleurs.",
+    description: "A citrus-based solvent cleaner formulated to cut through chain grime, old lube and brake dust fast. Safe on chains, cassettes, derailleur pulleys and most sealed bearings when rinsed after use.",
+    specs: ["Volume: 5L", "Base: citrus solvent", "Use: chains, cassettes, derailleurs", "Rinse required: yes, before re-lubing"],
+    image: "https://duramaid.co.za/cdn/shop/files/HydrosanMaxikleen5L.jpg?v=1752560825&width=2048"
+  },
+  {
+    id: "p14", category: "cleaning-supplies", name: "Bike Wash Concentrate 5L",
+    price: 349, unit: "5L", badge: "Bulk",
+    short: "pH-neutral wash concentrate, safe on decals and anodising.",
+    description: "A pH-neutral foam wash concentrate that lifts trail dirt and road grime without attacking decals, anodised finishes or carbon clear coat. Dilutes into a foam-gun or bucket ratio for daily wash-bay use.",
+    specs: ["Volume: 5L concentrate", "pH-neutral formula", "Safe on: paint, decals, anodising, carbon", "Use with: foam gun or bucket & sponge"],
+    image: "https://duramaid.co.za/cdn/shop/files/HydrosanMaxikleen5L.jpg?v=1752560825&width=2048"
+  },
+  {
+    id: "p15", category: "cleaning-supplies", name: "MTB & Moto All-Purpose Cleaner 1L",
+    price: 149, unit: "1L", badge: "Retail",
+    short: "Ready-to-use spray cleaner for the retail counter.",
+    description: "A ready-to-use, no-dilution spray cleaner for customers who want one bottle that handles frame, fork and plastics grime at home. Trigger-spray bottle, shelf-ready for the front counter.",
+    specs: ["Volume: 1L", "Ready to use, no dilution", "Use: frames, forks, plastics, fairings", "Format: trigger spray"],
+    image: "https://duramaid.co.za/cdn/shop/files/HydrosanMaxikleen5L.jpg?v=1752560825&width=2048"
+  },
+  {
+    id: "p16", category: "cleaning-supplies", name: "Chain Cleaning Scrubber Tool",
+    price: 219, unit: "each", badge: "Retail",
+    short: "Clip-on chain scrubber with rotating brushes.",
+    description: "A clip-on chain scrubber that wraps the chain in rotating brushes and a solvent reservoir. Cleans a full chain loop in under a minute with far less solvent than a rag-and-brush method.",
+    specs: ["Type: clip-on chain scrubber", "Brushes: internal rotating set (replaceable)", "Reservoir capacity: approx. 200ml solvent"],
+    image: "https://duramaid.co.za/cdn/shop/files/HydrosanMaxikleen5L.jpg?v=1752560825&width=2048"
+  },
+  {
+    id: "p17", category: "cleaning-supplies", name: "Detailing Brush Set (5-piece)",
+    price: 179, unit: "set", badge: "Retail",
+    short: "Stiff and soft brushes for cassettes, hubs and fairings.",
+    description: "Five brushes covering the sizes and stiffness a workshop actually reaches for: a stiff cassette brush, a soft-bristle detail brush, a two-sided hub/spoke brush, a narrow crevice brush and a long-handle frame brush.",
+    specs: ["Set size: 5 brushes", "Bristle types: stiff nylon & soft detail", "Use: cassettes, hubs, spokes, fairings, frames"],
+    image: "https://duramaid.co.za/cdn/shop/files/HydrosanMaxikleen5L.jpg?v=1752560825&width=2048"
+  },
+  {
+    id: "p18", category: "cleaning-supplies", name: "Microfibre Cloth Pack (Workshop 50-Pack)",
+    price: 349, unit: "pack of 50", badge: "Bulk",
+    short: "Lint-free workshop cloths bought once, not once a week.",
+    description: "Fifty lint-free microfibre cloths in a workshop pack, sized for wipe-downs, final detailing and polishing without leaving fibres on fresh paint or lenses. Machine washable and reusable, but priced to treat as consumable stock.",
+    specs: ["Pack size: 50 cloths", "Size: 30cm x 30cm each", "Lint-free, machine washable"],
+    image: "https://duramaid.co.za/cdn/shop/files/HydrosanMaxikleen5L.jpg?v=1752560825&width=2048"
+  },
+  {
+    id: "p19", category: "cleaning-supplies", name: "Parts Washer Solvent 20L Drum",
+    price: 1199, unit: "20L drum", badge: "Bulk",
+    short: "Recirculating parts-washer fluid for a dedicated wash sink.",
+    description: "Low-odour parts-washer solvent formulated for recirculating wash sinks, the fluid you top up a dedicated parts-washing station with, rather than a hand-spray product. Cuts brake dust, grease and grime off hard parts before rebuild.",
+    specs: ["Volume: 20L drum", "Use: recirculating parts-washer stations", "Low-odour formula"],
+    image: "https://duramaid.co.za/cdn/shop/files/HydrosanMaxikleen5L.jpg?v=1752560825&width=2048"
+  },
+  {
+    id: "p20", category: "cleaning-supplies", name: "Isopropyl Alcohol 5L (Prep & Contact Cleaner)",
+    price: 289, unit: "5L", badge: "Bulk",
+    short: "For disc prep, adhesive removal and electrical contacts.",
+    description: "5L of isopropyl alcohol for the jobs degreaser shouldn't touch: brake disc and pad prep before bleeding, adhesive residue removal, and a safe contact cleaner for electrical connectors on e-bikes and motorcycles.",
+    specs: ["Volume: 5L", "Use: disc/pad prep, adhesive removal, contact cleaning", "Fast evaporating, residue-free"],
+    image: "https://duramaid.co.za/cdn/shop/files/HydrosanMaxikleen5L.jpg?v=1752560825&width=2048"
+  },
+
+  /* ============================ TYRE SEALANTS ============================ */
+  {
+    id: "p21", category: "tyre-sealants", name: "Tubeless Tyre Sealant 1L Bottle",
+    price: 289, unit: "1L", badge: "Retail",
+    short: "Latex sealant for MTB and gravel tubeless setups.",
+    description: "A latex-based tubeless sealant for MTB and gravel setups, sized for the retail counter. Seals small punctures on the move and tops up easily through a removable valve core.",
+    specs: ["Volume: 1L", "Base: natural latex", "Use: MTB & gravel tubeless tyres", "Typical top-up interval: 2–3 months (climate dependent)"],
+    image: ""
+  },
+  {
+    id: "p22", category: "tyre-sealants", name: "Tubeless Tyre Sealant 5L",
+    price: 1099, unit: "5L", badge: "Bulk",
+    short: "Workshop-size sealant for build day and fleet servicing.",
+    description: "The same latex sealant in a 5L container for build days, demo fleets or shops running several tubeless setups a day. Pours cleanly with the supplied spout, no need to break bulk from a drum for a single job.",
+    specs: ["Volume: 5L", "Base: natural latex", "Use: MTB & gravel tubeless tyres", "Includes: pour spout"],
+    image: ""
+  },
+  {
+    id: "p23", category: "tyre-sealants", name: "Tubeless Tyre Sealant 20L Drum",
+    price: 3699, unit: "20L drum", badge: "Bulk",
+    short: "Floor-stock sealant drum for high-volume tubeless setups.",
+    description: "A 20L sealant drum for workshops setting up tubeless tyres daily. Priced per litre well below the retail bottle, meant to sit at the tubeless station and refill your dispensing bottles and syringes as needed.",
+    specs: ["Volume: 20L drum", "Base: natural latex", "Use: MTB & gravel tubeless tyres", "Best for: high-volume tubeless installs"],
+    image: ""
+  },
+  {
+    id: "p24", category: "tyre-sealants", name: "Sealant Injector Syringe 60ml",
+    price: 99, unit: "each", badge: "Retail",
+    short: "Valve-core-fitting syringe for quick top-ups.",
+    description: "A 60ml syringe with a valve-core-compatible tip for topping up sealant through the valve without removing the tyre bead. The standard tool for a quick trailside or counter top-up.",
+    specs: ["Capacity: 60ml", "Fits: Presta valves (core removed)", "Use: sealant top-ups"],
+    image: ""
+  },
+  {
+    id: "p25", category: "tyre-sealants", name: "Sealant Injector Syringe 120ml (Workshop)",
+    price: 149, unit: "each", badge: "Retail",
+    short: "Larger-capacity syringe for full fills and bigger tyres.",
+    description: "Double the capacity of our standard syringe, for full sealant fills on plus-size and fat bike tyres, or for workshops that would rather refill twice as few times per day.",
+    specs: ["Capacity: 120ml", "Fits: Presta valves (core removed)", "Use: full fills & top-ups on larger volume tyres"],
+    image: ""
+  },
+  {
+    id: "p26", category: "tyre-sealants", name: "Tyre Sealant Refill Bottle 500ml",
+    price: 179, unit: "500ml", badge: "Retail",
+    short: "Squeeze-top refill bottle, a mid-size option for the counter.",
+    description: "A 500ml squeeze-top refill bottle sitting between the 1L retail bottle and the small syringes. A popular size for customers who top up two or three times a season rather than buying a full litre.",
+    specs: ["Volume: 500ml", "Base: natural latex", "Format: squeeze-top applicator"],
+    image: ""
+  },
+  {
+    id: "p27", category: "tyre-sealants", name: "Motorcycle Tyre Sealant 1L",
+    price: 329, unit: "1L", badge: "Retail",
+    short: "Higher-viscosity sealant formulated for motorcycle tyres.",
+    description: "A higher-viscosity sealant formulated for the higher pressures and heat cycling of motorcycle tyres, where standard MTB latex sealant breaks down too quickly. Suited to tubeless motorcycle and ATV tyre setups.",
+    specs: ["Volume: 1L", "Use: tubeless motorcycle & ATV tyres", "Higher pressure & heat tolerance than MTB sealant"],
+    image: ""
+  },
+  {
+    id: "p28", category: "tyre-sealants", name: "Tubeless Sealant Booster / Latex Additive 1L",
+    price: 249, unit: "1L", badge: "Retail",
+    short: "Revives thickened sealant instead of a full re-fill.",
+    description: "A latex additive that revives sealant that's started to thicken or ball up inside the tyre, extending the life of an existing fill instead of stripping the tyre for a full re-sealant job.",
+    specs: ["Volume: 1L", "Use: mixed into existing sealant to restore consistency", "Compatible with: most latex-based sealants"],
+    image: ""
+  },
+  {
+    id: "p29", category: "tyre-sealants", name: "Sealant Measuring Cup Set (Workshop)",
+    price: 89, unit: "set", badge: "Retail",
+    short: "Marked cups for consistent fill volumes, job to job.",
+    description: "A set of marked measuring cups so every tyre gets a consistent, correct sealant volume instead of an eyeballed pour. Keeps fills repeatable across whoever's on the tubeless station that day.",
+    specs: ["Set size: 3 cups (60ml / 120ml / 250ml marked)", "Material: solvent-resistant plastic"],
+    image: ""
+  },
+  {
+    id: "p30", category: "tyre-sealants", name: "Anti-Puncture Sealant Concentrate 5L (Bulk)",
+    price: 999, unit: "5L", badge: "Bulk",
+    short: "Concentrate format for workshops that dilute their own stock.",
+    description: "A concentrated sealant base for workshops that prefer to manage their own dilution and additive ratios at scale, rather than buying pre-mixed drums. Works out as the lowest per-litre cost in the range.",
+    specs: ["Volume: 5L concentrate", "Use: workshop dilution to house ratio", "Lowest cost per finished litre in range"],
+    image: ""
+  },
+
+  /* ============================== THE ESSENTIALS ============================== */
+  {
+    id: "p31", category: "essentials", name: "Nitrile Gloves Box (100-Pack)",
+    price: 189, unit: "box of 100", badge: "Bulk",
+    short: "Powder-free nitrile gloves, the daily workshop staple.",
+    description: "Powder-free nitrile gloves in a box of 100, the glove every bay goes through fastest. Grease and solvent resistant with enough grip texture to still handle small fasteners.",
+    specs: ["Pack size: 100 gloves", "Material: nitrile, powder-free", "Sizes available: S / M / L / XL"],
+    image: ""
+  },
+  {
+    id: "p32", category: "essentials", name: "Nitrile Gloves Case (10 Boxes, Bulk)",
+    price: 1649, unit: "case of 10 boxes", badge: "Bulk",
+    short: "A full case for workshops that don't want to reorder monthly.",
+    description: "Ten boxes of the same nitrile gloves in one case, the floor-stock option for multi-bay workshops, sized to cut delivery frequency and per-box cost rather than reordering single boxes.",
+    specs: ["Pack size: 10 x 100-glove boxes (1000 gloves)", "Material: nitrile, powder-free", "Sizes available: S / M / L / XL"],
+    image: ""
+  },
+  {
+    id: "p33", category: "essentials", name: "Shop Rags Pack (5kg Bulk)",
+    price: 259, unit: "5kg bag", badge: "Bulk",
+    short: "Absorbent cotton wiping rags sold by weight, not by the cloth.",
+    description: "5kg of absorbent cotton wiping rags for the jobs you don't want a good microfibre cloth on: degreasing, oil changes and general mess. Sold by weight so restocking the rag bin is one line item, not a count.",
+    specs: ["Weight: 5kg per bag", "Material: mixed cotton wiping rags", "Use: general workshop wipe-down & degreasing"],
+    image: ""
+  },
+  {
+    id: "p34", category: "essentials", name: "Chain Lube: Wet Conditions 500ml",
+    price: 159, unit: "500ml", badge: "Retail",
+    short: "Heavier lube that clings through mud and rain.",
+    description: "A heavier-bodied lube formulated to stay put through wet, muddy conditions where a dry lube washes off in one ride. The standard recommendation for customers riding through a wet season.",
+    specs: ["Volume: 500ml", "Conditions: wet / muddy", "Format: drip bottle"],
+    image: ""
+  },
+  {
+    id: "p35", category: "essentials", name: "Chain Lube: Dry Conditions 500ml",
+    price: 159, unit: "500ml", badge: "Retail",
+    short: "Lighter, low-attraction lube for dusty, dry trails.",
+    description: "A lighter lube that attracts far less dust and grit than a wet-conditions lube. It's the right recommendation for dry, dusty trail conditions where a heavy lube just becomes a dirt magnet.",
+    specs: ["Volume: 500ml", "Conditions: dry / dusty", "Format: drip bottle"],
+    image: ""
+  },
+  {
+    id: "p36", category: "essentials", name: "Chain Lube Bulk Refill 5L",
+    price: 1299, unit: "5L", badge: "Bulk",
+    short: "Refill your retail drip bottles from one workshop container.",
+    description: "A 5L bulk container of our all-conditions chain lube for refilling retail drip bottles behind the counter instead of buying and binning small bottles one at a time. Meaningfully lower cost per service.",
+    specs: ["Volume: 5L", "Conditions: all-round formula", "Use: refilling retail bottles & workshop application"],
+    image: ""
+  },
+  {
+    id: "p37", category: "essentials", name: "Torque Wrench Set (Bike-Specific)",
+    price: 649, unit: "set", badge: "Retail",
+    short: "Pre-set click torque wrench with common bike bit sizes.",
+    description: "A click-style torque wrench pre-set to the low torque ranges bikes actually use, with a bit set covering the common Allen and Torx sizes on stems, seatposts, cranks and disc brakes. No guessing, no over-torqued carbon.",
+    specs: ["Torque range: 2–24 Nm", "Includes: bit set (Allen & Torx common sizes)", "Style: pre-set click torque wrench"],
+    image: ""
+  },
+  {
+    id: "p38", category: "essentials", name: "Multi-Tool Kit (Workshop Grade)",
+    price: 389, unit: "kit", badge: "Retail",
+    short: "A heavier-duty multi-tool built for daily bay use, not the trail.",
+    description: "A workshop-grade multi-tool with the wear-resistant bits and larger handle a bay uses all day, every day. Built for repetition rather than for carrying in a saddle bag.",
+    specs: ["Tool count: 20-in-1", "Includes: Allen, Torx, flat/Phillips, spoke keys, chain tool", "Build: workshop-duty, not ultralight"],
+    image: ""
+  },
+  {
+    id: "p39", category: "essentials", name: "Work Stand Clamp Pad Replacements",
+    price: 129, unit: "pair", badge: "Retail",
+    short: "Replacement rubber jaw pads for repair stand clamps.",
+    description: "A pair of replacement rubber clamp pads for repair stand jaws once the originals harden, tear or start marking frames. A cheap fix that protects every frame clamped after it.",
+    specs: ["Pack size: 1 pair", "Fits: most standard repair stand clamp jaws", "Material: soft-grip rubber"],
+    image: ""
+  },
+  {
+    id: "p40", category: "essentials", name: "Anti-Seize Grease Tub 500g (Workshop)",
+    price: 219, unit: "500g", badge: "Bulk",
+    short: "Prevents galling and seizing on threads and seatposts.",
+    description: "A 500g tub of anti-seize grease for threads, seatposts and any alloy-into-alloy or alloy-into-carbon contact point where galling or seizing is a risk. One tub covers a very large number of services.",
+    specs: ["Weight: 500g", "Use: threads, seatposts, alloy/carbon contact points", "Format: workshop tub with brush applicator"],
+    image: ""
+  }
+];
+
+/* ============================== REVIEWS (placeholder, replace before launch) ============================== */
+const REVIEWS = [
+  {
+    name: "Workshop Manager",
+    business: "Independent MTB Service Bay",
+    rating: 5,
+    quote: "We used to juggle three suppliers for tape, sealant and cleaning stock. Ordering everything from one place and getting it delivered on one invoice has saved us actual admin hours every month."
+  },
+  {
+    name: "Owner-Operator",
+    business: "Motorcycle Workshop",
+    rating: 5,
+    quote: "The bulk degreaser and parts-washer fluid are the same stuff we were paying more for elsewhere. Reordering takes two minutes because the site remembers what we normally buy."
+  },
+  {
+    name: "Service Advisor",
+    business: "Multi-Bay Bike Store",
+    rating: 4,
+    quote: "Rim tape in every width we actually stock, plus the tools to fit it. No more hunting three sites for one build. Would like a few more bulk sizes on the gloves but otherwise spot on."
+  },
+  {
+    name: "Head Mechanic",
+    business: "Trail Centre Workshop",
+    rating: 5,
+    quote: "Sealant top-ups are the one job that never stops, so having a 5L option instead of opening bottle after bottle has been the biggest single time-saver for us this year."
+  }
+];
+
+/* ============================== STORES SUPPLIED (placeholder, replace before launch) ============================== */
+const STORES_SUPPLIED = [
+  "Trailhead Bike Co.",
+  "Redline Motorcycle Works",
+  "Summit Cycle Studio",
+  "Coastal Moto Garage",
+  "Ridgeline Bike Repairs",
+  "Southside Two-Wheel Service",
+  "Backwoods MTB Workshop",
+  "Harbour City Motorcycles"
+];
+
+</script>
+<script>
+/* =========================================================================
+   CART LOGIC - shared by every page via localStorage.
+   Cart shape: { "p01": qty, "p07": qty, ... }
+   ========================================================================= */
+
+const CART_KEY = "oswss_cart_v1";
+
+function formatPrice(amount) {
+  return SITE_CONFIG.currencySymbol + Number(amount).toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function getProductById(id) {
+  return PRODUCTS.find(p => p.id === id);
+}
+
+function readCart() {
+  try {
+    const raw = localStorage.getItem(CART_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function writeCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateCartBadge();
+}
+
+function addToCart(id, qty) {
+  qty = Math.max(1, parseInt(qty, 10) || 1);
+  const cart = readCart();
+  cart[id] = (cart[id] || 0) + qty;
+  writeCart(cart);
+}
+
+function setCartQty(id, qty) {
+  qty = parseInt(qty, 10) || 0;
+  const cart = readCart();
+  if (qty <= 0) {
+    delete cart[id];
+  } else {
+    cart[id] = qty;
+  }
+  writeCart(cart);
+}
+
+function removeFromCart(id) {
+  const cart = readCart();
+  delete cart[id];
+  writeCart(cart);
+}
+
+function clearCart() {
+  localStorage.removeItem(CART_KEY);
+  updateCartBadge();
+}
+
+function cartLineItems() {
+  const cart = readCart();
+  return Object.keys(cart).map(id => {
+    const product = getProductById(id);
+    if (!product) return null;
+    return { product, qty: cart[id], lineTotal: product.price * cart[id] };
+  }).filter(Boolean);
+}
+
+function cartCount() {
+  const cart = readCart();
+  return Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+}
+
+function cartSubtotal() {
+  return cartLineItems().reduce((sum, item) => sum + item.lineTotal, 0);
+}
+
+function updateCartBadge() {
+  document.querySelectorAll("[data-cart-count]").forEach(el => {
+    const count = cartCount();
+    el.textContent = count;
+    el.style.display = count > 0 ? "inline-flex" : "none";
+  });
+}
+
+function generateOrderNumber() {
+  const now = new Date();
+  const stamp = now.getFullYear().toString().slice(2) +
+    String(now.getMonth() + 1).padStart(2, "0") +
+    String(now.getDate()).padStart(2, "0");
+  const rand = Math.floor(1000 + Math.random() * 9000);
+  return "OSWS-" + stamp + "-" + rand;
+}
+
+document.addEventListener("DOMContentLoaded", updateCartBadge);
+
+</script>
+<script>
+/* =========================================================================
+   SINGLE-FILE SPA ROUTER + VIEW RENDERERS
+   Routes (hash-based, no reload, no separate files needed):
+     #/                     home
+     #/shop?cat=slug        shop all / filtered by collection
+     #/product/p01          product detail
+     #/cart                 cart
+     #/checkout             place order
+     #/orders               order history (Supabase-backed, email code login)
+     #/about                about us
+     #/testing              product development & testing
+   ========================================================================= */
+
+/* Supabase client. Only created once SITE_CONFIG.supabaseUrl and
+   supabaseAnonKey are both filled in. Until then, order history is
+   disabled but checkout still works and still produces a downloadable
+   invoice. Wrapped defensively so a failed CDN load never breaks the
+   rest of the site. */
+let sb = null;
+try {
+  if (SITE_CONFIG.supabaseUrl && SITE_CONFIG.supabaseAnonKey && window.supabase) {
+    sb = window.supabase.createClient(SITE_CONFIG.supabaseUrl, SITE_CONFIG.supabaseAnonKey);
+  }
+} catch (e) {
+  console.error("Supabase client failed to initialise:", e);
+  sb = null;
+}
+
+const ICONS = {
+  tape: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>',
+  spray: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3h4v4H8z"/><path d="M9 7h2v3H9z"/><rect x="6" y="10" width="8" height="11" rx="1"/><path d="M3 6l1.5 1.5M3 3l2 1M16 5l2-1"/></svg>',
+  drop: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/></svg>',
+  wrench: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.3 2.3-2.6-.6-.6-2.6 2.5-2.5z"/></svg>',
+  cart: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.1a2 2 0 0 0 2-1.6L23 6H6"/></svg>',
+  menu: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>'
+};
+
+/* ---------------------------- shared card renderers ---------------------------- */
+function productThumbInner(product) {
+  if (product.image) return `<img src="${product.image}" alt="${product.name}">`;
+  const cat = CATEGORIES.find(c => c.slug === product.category);
+  return `<span>${ICONS[cat.icon] || ""}<br>${product.name.split(" ").slice(0,3).join(" ")}</span>`;
+}
+function badgeClass(badge) { return badge === "Bulk" ? "badge badge-bulk" : "badge"; }
+
+function renderProductCard(product) {
+  const cat = CATEGORIES.find(c => c.slug === product.category);
+  return `
+  <a class="product-card" href="#/product/${product.id}">
+    <div class="product-thumb">
+      ${product.badge ? `<span class="${badgeClass(product.badge)}">${product.badge}</span>` : ""}
+      ${productThumbInner(product)}
+    </div>
+    <div class="product-body">
+      <span class="product-cat-label">${cat ? cat.name : ""}</span>
+      <h3>${product.name}</h3>
+      <p class="product-short">${product.short}</p>
+      <div class="product-price-row">
+        <span class="product-price">${formatPrice(product.price)}</span>
+        <span class="product-unit">/ ${product.unit}</span>
+      </div>
+    </div>
+  </a>`;
+}
+function productGridHTML(products) {
+  if (!products.length) return `<div class="empty-state"><h3>No products match those filters</h3><p>Try clearing a filter or widening your price range.</p></div>`;
+  return `<div class="product-grid">${products.map(renderProductCard).join("")}</div>`;
+}
+function categoryGridHTML() {
+  return `<div class="cat-grid">${CATEGORIES.map(c => {
+    const count = PRODUCTS.filter(p => p.category === c.slug).length;
+    return `
+    <a class="cat-card" href="#/shop?cat=${c.slug}">
+      <div class="cat-icon">${ICONS[c.icon]}</div>
+      <h3>${c.name}</h3>
+      <p>${c.tagline}</p>
+      <span class="cat-count">${count} products &rarr;</span>
+    </a>`;
+  }).join("")}</div>`;
+}
+function reviewGridHTML() {
+  return `<div class="review-grid">${REVIEWS.map(r => `
+    <div class="review-card">
+      <div class="stars">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</div>
+      <p>&ldquo;${r.quote}&rdquo;</p>
+      <div class="review-who"><b>${r.name}</b> &middot; ${r.business}</div>
+    </div>`).join("")}</div>`;
+}
+function storeStripHTML() {
+  return `<div class="store-strip">${STORES_SUPPLIED.map(s => `<span class="store-chip">${s}</span>`).join("")}</div>`;
+}
+
+/* ---------------------------- header / footer (static, rendered once) ---------------------------- */
+function renderChrome() {
+  const catLinks = CATEGORIES.map(c => `<li><a href="#/shop?cat=${c.slug}">${c.name}</a></li>`).join("");
+  document.getElementById("site-header-mount").innerHTML = `
+  <header class="site-header">
+    <div class="nav-bar">
+      <a class="brand" href="#/">
+        <span class="brand-mark">◍</span>
+        <span>One Stop Work Shop<br><small>Supply Store, ${SITE_CONFIG.location}</small></span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">${ICONS.menu}</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#/" data-route="/">Home</a></li>
+        <li><a href="#/shop" data-route="/shop">Shop All</a></li>
+        <li><a href="#/shop?cat=rim-tapes">Rim Tapes</a></li>
+        <li><a href="#/shop?cat=cleaning-supplies">Cleaning</a></li>
+        <li><a href="#/shop?cat=tyre-sealants">Sealants</a></li>
+        <li><a href="#/shop?cat=essentials">Essentials</a></li>
+        <li><a href="#/about" data-route="/about">About Us</a></li>
+        <li><a href="#/testing" data-route="/testing">Product Testing</a></li>
+        <li><a href="#/orders" data-route="/orders">My Orders</a></li>
+      </ul>
+      <div class="nav-right">
+        <a class="cart-link" href="#/cart">
+          ${ICONS.cart}<span>Cart</span>
+          <span class="cart-badge" data-cart-count>0</span>
+        </a>
+      </div>
+    </div>
+  </header>`;
+
+  document.getElementById("site-footer-mount").innerHTML = `
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h4>One Stop Work Shop Supply Store</h4>
+        <p style="max-width:34ch;">Everything an MTB or motorcycle workshop needs to keep bikes moving: one supplier, one order, one delivery.</p>
+      </div>
+      <div>
+        <h4>Collections</h4>
+        <ul>${catLinks}</ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#/about">About Us</a></li>
+          <li><a href="#/testing">Product Development &amp; Testing</a></li>
+          <li><a href="#/shop">Shop All Products</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Get in touch</h4>
+        <ul>
+          <li><a href="mailto:${SITE_CONFIG.businessEmail}">${SITE_CONFIG.businessEmail}</a></li>
+          <li><span>${SITE_CONFIG.location}</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>&copy; ${new Date().getFullYear()} One Stop Work Shop Supply Store. All rights reserved.</span>
+      <span>Prices shown in ZAR, excl. delivery.</span>
+    </div>
+  </footer>`;
+
+  const toggle = document.getElementById("navToggle");
+  const links = document.getElementById("navLinks");
+  toggle.addEventListener("click", () => {
+    const open = links.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  links.addEventListener("click", (e) => {
+    if (e.target.tagName === "A") links.classList.remove("open");
+  });
+}
+
+function setActiveNav(path) {
+  document.querySelectorAll("#navLinks a[data-route]").forEach(a => {
+    a.classList.toggle("active", a.dataset.route === path);
+  });
+}
+
+/* ---------------------------- view: HOME ---------------------------- */
+function viewHome() {
+  return `
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="hero-tag">Serving MTB &amp; motorcycle workshops</span>
+        <h1>All Your Workshop Essentials From <span class="accent">1 Supplier</span></h1>
+        <p class="lead">Tapes, Sealants, Cleaning Equipment and all workshop consumables.</p>
+        <div class="hero-ctas">
+          <a href="#/shop" class="btn btn-primary">Shop all products</a>
+          <a href="#/shop" class="btn btn-outline-light">Browse Categories</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>Bulk &amp; retail</b><span>sizes on most lines</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="https://plain-apac-prod-public.komododecks.com/202609/13/sxbTGdCz2Mfa5SCopmZD/image.png" alt="Workshop supplies: tapes, sealants and cleaning equipment">
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Four collections, everything a bay actually reorders</h2>
+          <p>Built around what MTB and motorcycle workshops run out of first.</p>
+        </div>
+        <a href="#/shop" class="btn btn-outline">View all products</a>
+      </div>
+      ${categoryGridHTML()}
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--white); padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Popular right now</h2>
+          <p>The lines workshops come back for most.</p>
+        </div>
+      </div>
+      ${productGridHTML(["p02","p11","p21","p31","p34","p07","p14","p37"].map(getProductById))}
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="wrap split">
+      <div>
+        <h2>Built so restocking takes minutes, not a morning</h2>
+        <p>No more three suppliers for tape, sealant and degreaser. Order what you need in just a couple of clicks and we'll deliver it straight to your door, or set up a recurring monthly order and we'll take the hassle of restocking off your hands completely.</p>
+        <div class="hero-ctas">
+          <a href="#/shop" class="btn btn-primary">Place an order</a>
+          <a href="#/testing" class="btn btn-outline-light">How we choose our products</a>
+        </div>
+      </div>
+      <div class="stat-block">
+        <div><b>Bulk</b><span>sizes on degreaser, sealant, tape &amp; lube for busy bays</span></div>
+        <div><b>Retail</b><span>sizes on tape, sealant &amp; essentials for your front counter</span></div>
+        <div><b>1</b><span>invoice and delivery instead of several</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>What workshops are saying</h2>
+          <p>Real feedback from the bays we supply.</p>
+        </div>
+      </div>
+      ${reviewGridHTML()}
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--white);">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Stores we currently supply</h2>
+          <p>A growing list of independent bike and motorcycle workshops.</p>
+        </div>
+      </div>
+      ${storeStripHTML()}
+    </div>
+  </section>`;
+}
+
+/* ---------------------------- view: SHOP ---------------------------- */
+let shopState = { categories: new Set(), badges: new Set(), priceMin: null, priceMax: null, sort: "default" };
+
+function viewShop(params) {
+  shopState = { categories: new Set(params.get("cat") ? [params.get("cat")] : []), badges: new Set(), priceMin: null, priceMax: null, sort: "default" };
+  return `
+  <section class="page-header">
+    <div class="wrap">
+      <h1 style="font-size:2rem;">Shop all products</h1>
+      <p>Every rim tape, cleaner, sealant and essential we stock, in one place. Filter by collection, size or price to find exactly what your bay needs.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap shop-layout">
+      <aside class="filters">
+        <div class="filter-group">
+          <h4>Collection</h4>
+          <div id="categoryFilters"></div>
+        </div>
+        <div class="filter-group">
+          <h4>Pack size</h4>
+          <label class="filter-option"><input type="checkbox" value="Retail" class="badge-filter"> Retail</label>
+          <label class="filter-option"><input type="checkbox" value="Bulk" class="badge-filter"> Bulk</label>
+          <label class="filter-option"><input type="checkbox" value="Best Seller" class="badge-filter"> Best Seller</label>
+        </div>
+        <div class="filter-group">
+          <h4>Price range (ZAR)</h4>
+          <div class="price-inputs">
+            <input type="text" id="priceMin" placeholder="Min">
+            <span>&mdash;</span>
+            <input type="text" id="priceMax" placeholder="Max">
+          </div>
+        </div>
+        <button class="btn btn-outline btn-block btn-sm" id="clearFilters">Clear all filters</button>
+      </aside>
+      <div>
+        <div class="shop-toolbar">
+          <span class="result-count" id="resultCount"></span>
+          <select id="sortSelect">
+            <option value="default">Sort: Featured</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="name-asc">Name: A to Z</option>
+          </select>
+        </div>
+        <div id="shopGrid"></div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function attachShopEvents() {
+  function buildCategoryFilters() {
+    const mount = document.getElementById("categoryFilters");
+    mount.innerHTML = CATEGORIES.map(c => `
+      <label class="filter-option">
+        <input type="checkbox" value="${c.slug}" class="cat-filter" ${shopState.categories.has(c.slug) ? "checked" : ""}>
+        ${c.name}
+      </label>`).join("");
+    mount.querySelectorAll(".cat-filter").forEach(cb => {
+      cb.addEventListener("change", () => {
+        cb.checked ? shopState.categories.add(cb.value) : shopState.categories.delete(cb.value);
+        applyFilters();
+      });
+    });
+  }
+  function applyFilters() {
+    let results = PRODUCTS.slice();
+    if (shopState.categories.size) results = results.filter(p => shopState.categories.has(p.category));
+    if (shopState.badges.size) results = results.filter(p => shopState.badges.has(p.badge));
+    if (shopState.priceMin !== null && !isNaN(shopState.priceMin)) results = results.filter(p => p.price >= shopState.priceMin);
+    if (shopState.priceMax !== null && !isNaN(shopState.priceMax)) results = results.filter(p => p.price <= shopState.priceMax);
+    if (shopState.sort === "price-asc") results.sort((a,b) => a.price - b.price);
+    if (shopState.sort === "price-desc") results.sort((a,b) => b.price - a.price);
+    if (shopState.sort === "name-asc") results.sort((a,b) => a.name.localeCompare(b.name));
+    document.getElementById("resultCount").textContent = results.length + " product" + (results.length === 1 ? "" : "s");
+    document.getElementById("shopGrid").innerHTML = productGridHTML(results);
+  }
+  document.querySelectorAll(".badge-filter").forEach(cb => {
+    cb.addEventListener("change", () => {
+      cb.checked ? shopState.badges.add(cb.value) : shopState.badges.delete(cb.value);
+      applyFilters();
+    });
+  });
+  document.getElementById("priceMin").addEventListener("input", (e) => { shopState.priceMin = e.target.value ? parseFloat(e.target.value) : null; applyFilters(); });
+  document.getElementById("priceMax").addEventListener("input", (e) => { shopState.priceMax = e.target.value ? parseFloat(e.target.value) : null; applyFilters(); });
+  document.getElementById("sortSelect").addEventListener("change", (e) => { shopState.sort = e.target.value; applyFilters(); });
+  document.getElementById("clearFilters").addEventListener("click", () => {
+    shopState = { categories: new Set(), badges: new Set(), priceMin: null, priceMax: null, sort: "default" };
+    document.getElementById("priceMin").value = "";
+    document.getElementById("priceMax").value = "";
+    document.getElementById("sortSelect").value = "default";
+    document.querySelectorAll(".badge-filter").forEach(cb => cb.checked = false);
+    buildCategoryFilters();
+    applyFilters();
+  });
+  buildCategoryFilters();
+  applyFilters();
+}
+
+/* ---------------------------- view: PRODUCT ---------------------------- */
+function viewProduct(id) {
+  const product = getProductById(id);
+  if (!product) {
+    return `<section class="section"><div class="wrap empty-state"><h3>We couldn't find that product</h3><p>It may have been removed or the link is out of date.</p><a href="#/shop" class="btn btn-primary">Back to shop</a></div></section>`;
+  }
+  const cat = CATEGORIES.find(c => c.slug === product.category);
+  const specsHTML = product.specs.map(s => {
+    const parts = s.split(":");
+    return `<li><span>${parts[0]}</span><span>${parts.slice(1).join(":").trim()}</span></li>`;
+  }).join("");
+  const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+
+  return `
+  <section class="section">
+    <div class="wrap">
+      <div class="pd-crumb">
+        <a href="#/">Home</a> &rsaquo; <a href="#/shop">Shop</a> &rsaquo; <a href="#/shop?cat=${cat.slug}">${cat.name}</a> &rsaquo; <span>${product.name}</span>
+      </div>
+      <div class="product-detail">
+        <div class="pd-image">${product.image ? `<img src="${product.image}" alt="${product.name}">` : `<span>${ICONS[cat.icon]}<br>${product.name}</span>`}</div>
+        <div>
+          <span class="hero-tag" style="border-color:var(--paper-dim); color:var(--green-deep);">${cat.name}</span>
+          <h1 style="margin-top:10px;">${product.name}</h1>
+          <p style="color:var(--steel);">${product.short}</p>
+          <div class="pd-price">${formatPrice(product.price)}</div>
+          <div class="pd-unit">per ${product.unit}${product.badge ? " · " + product.badge : ""}</div>
+
+          <div class="qty-row">
+            <div class="qty-control">
+              <button type="button" id="qtyMinus" aria-label="Decrease quantity">&minus;</button>
+              <input type="text" id="qtyInput" value="1" inputmode="numeric">
+              <button type="button" id="qtyPlus" aria-label="Increase quantity">+</button>
+            </div>
+            <span class="small-note" id="lineTotal"></span>
+          </div>
+
+          <div class="pd-actions">
+            <button class="btn btn-primary" id="addToCartBtn">Add to cart</button>
+            <a href="#/cart" class="btn btn-outline">View cart</a>
+          </div>
+          <div class="added-toast" id="addedToast"></div>
+
+          <p style="margin-top:24px;">${product.description}</p>
+
+          <div class="pd-specs">
+            <h4 style="font-size:0.9rem; color:var(--steel); margin-bottom:10px;">Specifications</h4>
+            <ul>${specsHTML}</ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" style="background:var(--white);">
+    <div class="wrap">
+      <div class="section-head"><div><h2>You might also need</h2></div></div>
+      ${productGridHTML(related)}
+    </div>
+  </section>`;
+}
+
+function attachProductEvents(id) {
+  const product = getProductById(id);
+  if (!product) return;
+  const qtyInput = document.getElementById("qtyInput");
+  const lineTotalEl = document.getElementById("lineTotal");
+  function refreshLineTotal() {
+    const qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
+    lineTotalEl.textContent = qty > 1 ? ("Line total: " + formatPrice(qty * product.price)) : "";
+  }
+  document.getElementById("qtyMinus").addEventListener("click", () => {
+    qtyInput.value = Math.max(1, (parseInt(qtyInput.value, 10) || 1) - 1);
+    refreshLineTotal();
+  });
+  document.getElementById("qtyPlus").addEventListener("click", () => {
+    qtyInput.value = (parseInt(qtyInput.value, 10) || 1) + 1;
+    refreshLineTotal();
+  });
+  qtyInput.addEventListener("input", refreshLineTotal);
+  document.getElementById("addToCartBtn").addEventListener("click", () => {
+    addToCart(product.id, qtyInput.value);
+    const toast = document.getElementById("addedToast");
+    toast.textContent = `Added ${qtyInput.value} × ${product.name} to your cart.`;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3200);
+  });
+}
+
+/* ---------------------------- view: CART ---------------------------- */
+function viewCart() {
+  return `
+  <section class="page-header">
+    <div class="wrap">
+      <h1 style="font-size:2rem;">Your cart</h1>
+      <p>Review your order before you place it.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap" id="cartWrap"></div>
+  </section>`;
+}
+
+function renderCartInner() {
+  const items = cartLineItems();
+  const wrap = document.getElementById("cartWrap");
+  if (!items.length) {
+    wrap.innerHTML = `<div class="empty-state"><h3>Your cart is empty</h3><p>Add some products to get started.</p><a href="#/shop" class="btn btn-primary">Shop all products</a></div>`;
+    return;
+  }
+  const rows = items.map(item => `
+    <tr>
+      <td>
+        <div class="cart-item-info">
+          <div class="cart-thumb">${item.product.image ? `<img src="${item.product.image}" alt="">` : ""}</div>
+          <div>
+            <div class="cart-item-name"><a href="#/product/${item.product.id}" style="color:inherit; text-decoration:none;">${item.product.name}</a></div>
+            <div class="cart-item-unit">${formatPrice(item.product.price)} / ${item.product.unit}</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="qty-control">
+          <button type="button" class="qty-dec" data-id="${item.product.id}">&minus;</button>
+          <input type="text" class="qty-field" data-id="${item.product.id}" value="${item.qty}" inputmode="numeric" style="width:44px;">
+          <button type="button" class="qty-inc" data-id="${item.product.id}">+</button>
+        </div>
+      </td>
+      <td><strong>${formatPrice(item.lineTotal)}</strong></td>
+      <td><button class="remove-link" data-id="${item.product.id}">Remove</button></td>
+    </tr>`).join("");
+
+  const subtotal = cartSubtotal();
+  const freeDeliveryNote = subtotal >= SITE_CONFIG.freeDeliveryThreshold
+    ? "Qualifies for free delivery."
+    : `Add ${formatPrice(SITE_CONFIG.freeDeliveryThreshold - subtotal)} more for free delivery.`;
+
+  wrap.innerHTML = `
+    <div class="cart-layout">
+      <div>
+        <table class="cart-table">
+          <thead><tr><th>Product</th><th>Quantity</th><th>Total</th><th></th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <div class="cart-summary">
+        <h3 style="margin-bottom:16px;">Order summary</h3>
+        <div class="summary-row"><span>Subtotal</span><span>${formatPrice(subtotal)}</span></div>
+        <div class="summary-row"><span>Delivery</span><span>Calculated on confirmation</span></div>
+        <div class="summary-row total"><span>Estimated total</span><span>${formatPrice(subtotal)}</span></div>
+        <p class="small-note" style="margin-top:10px;">${freeDeliveryNote}</p>
+        <a href="#/checkout" class="btn btn-primary btn-block" style="margin-top:16px;">Place order</a>
+        <a href="#/shop" class="btn btn-outline btn-block" style="margin-top:10px;">Continue shopping</a>
+      </div>
+    </div>`;
+
+  wrap.querySelectorAll(".qty-inc").forEach(btn => btn.addEventListener("click", () => {
+    const cart = readCart();
+    setCartQty(btn.dataset.id, (cart[btn.dataset.id] || 0) + 1);
+    renderCartInner();
+  }));
+  wrap.querySelectorAll(".qty-dec").forEach(btn => btn.addEventListener("click", () => {
+    const cart = readCart();
+    setCartQty(btn.dataset.id, (cart[btn.dataset.id] || 0) - 1);
+    renderCartInner();
+  }));
+  wrap.querySelectorAll(".qty-field").forEach(input => input.addEventListener("change", () => {
+    setCartQty(input.dataset.id, input.value);
+    renderCartInner();
+  }));
+  wrap.querySelectorAll(".remove-link").forEach(btn => btn.addEventListener("click", () => {
+    removeFromCart(btn.dataset.id);
+    renderCartInner();
+  }));
+}
+
+/* ---------------------------- view: CHECKOUT ---------------------------- */
+function viewCheckout() {
+  const items = cartLineItems();
+  if (!items.length) {
+    return `<section class="section"><div class="wrap empty-state"><h3>Your cart is empty</h3><p>Add products before you place an order.</p><a href="#/shop" class="btn btn-primary">Shop all products</a></div></section>`;
+  }
+  return `
+  <section class="page-header">
+    <div class="wrap">
+      <h1 style="font-size:2rem;">Place Order</h1>
+      <p>Placing an order here sends a request through to us. We'll confirm stock, delivery and final total by email or phone before anything is charged.</p>
+    </div>
+  </section>
+  <section class="section" id="checkoutSection">
+    <div class="wrap checkout-layout">
+      <div>
+        <form id="orderForm">
+          <h3>Your details</h3>
+          <div class="field-two">
+            <div class="field-row"><label for="fullName">Full name *</label><input type="text" id="fullName" required></div>
+            <div class="field-row"><label for="businessName">Workshop / business name</label><input type="text" id="businessName"></div>
+          </div>
+          <div class="field-two">
+            <div class="field-row"><label for="email">Email *</label><input type="email" id="email" required></div>
+            <div class="field-row"><label for="phone">Phone *</label><input type="tel" id="phone" required></div>
+          </div>
+          <div class="field-row"><label for="address">Delivery address *</label><textarea id="address" rows="3" required></textarea></div>
+          <div class="field-row"><label for="notes">Order notes (optional)</label><textarea id="notes" rows="3" placeholder="Preferred delivery day, account reference, anything else we should know."></textarea></div>
+          <button type="submit" class="btn btn-primary btn-block" id="placeOrderBtn">Place order</button>
+          <p class="form-note">By submitting, you're sending us a request to order these items, not a completed purchase. We'll be in touch to confirm.</p>
+        </form>
+      </div>
+      <div>
+        <div class="order-box">
+          <h3 style="margin-bottom:14px;">Order summary</h3>
+          <div id="orderLines">${items.map(item => `<div class="order-line"><span>${item.qty} × ${item.product.name}</span><span>${formatPrice(item.lineTotal)}</span></div>`).join("")}</div>
+          <div class="summary-row total"><span>Estimated total</span><span>${formatPrice(cartSubtotal())}</span></div>
+          <p class="small-note" style="margin-top:10px;">Final total confirmed with delivery cost once we review your request.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="confirmSection" style="display:none;">
+    <div class="wrap">
+      <div class="confirm-box show">
+        <h2 style="color:#fff;">Order Placed</h2>
+        <p style="color:#c7ccd0;" id="confirmedMessage">Keep this reference for your records.</p>
+        <div class="order-number" id="confirmedOrderNumber"></div>
+        <div class="hero-ctas" style="justify-content:center;" id="confirmActions">
+          <a href="#/" class="btn btn-primary">Back to home</a>
+          <a href="#/shop" class="btn btn-outline-light">Continue shopping</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function buildOrderBodyText(orderNumber, details, items) {
+  const lines = items.map(item => `- ${item.qty} x ${item.product.name} (${item.product.id}) @ ${formatPrice(item.product.price)} = ${formatPrice(item.lineTotal)}`).join("\n");
+  return `New order: ${orderNumber}\n\n` +
+    `Customer: ${details.fullName}\n` +
+    `Workshop / business: ${details.businessName || "-"}\n` +
+    `Email: ${details.email}\n` +
+    `Phone: ${details.phone}\n` +
+    `Delivery address: ${details.address}\n` +
+    `Notes: ${details.notes || "-"}\n\n` +
+    `Order items:\n${lines}\n\n` +
+    `Estimated total: ${formatPrice(items.reduce((s, i) => s + i.lineTotal, 0))}\n` +
+    `(Final total to be confirmed with delivery cost.)`;
+}
+
+function downloadInvoicePDF(order) {
+  if (!window.jspdf) {
+    alert("The invoice tool didn't load (check your internet connection) so no PDF could be generated. Your order details are shown on screen, please save a screenshot as backup.");
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const marginX = 15;
+  let y = 20;
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.text(SITE_CONFIG.businessName, marginX, y);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  y += 7;
+  doc.text(SITE_CONFIG.location, marginX, y);
+  y += 5;
+  doc.text(SITE_CONFIG.businessEmail, marginX, y);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("Order Invoice", 150, 20);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text("Order #: " + order.order_number, 150, 27);
+  doc.text("Date: " + new Date(order.created_at || Date.now()).toLocaleDateString(), 150, 32);
+
+  y = 45;
+  doc.setDrawColor(210);
+  doc.line(marginX, y, 195, y);
+  y += 8;
+
+  doc.setFont("helvetica", "bold");
+  doc.text("Billed to", marginX, y);
+  y += 6;
+  doc.setFont("helvetica", "normal");
+  doc.text(order.customer_name || "", marginX, y); y += 5;
+  if (order.business_name) { doc.text(order.business_name, marginX, y); y += 5; }
+  doc.text(order.customer_email || "", marginX, y); y += 5;
+  doc.text(order.phone || "", marginX, y); y += 5;
+  const addressLines = doc.splitTextToSize(order.address || "", 90);
+  doc.text(addressLines, marginX, y);
+  y += addressLines.length * 5 + 6;
+
+  doc.setFont("helvetica", "bold");
+  doc.text("Item", marginX, y);
+  doc.text("Qty", 145, y);
+  doc.text("Total", 172, y);
+  y += 3;
+  doc.line(marginX, y, 195, y);
+  y += 6;
+  doc.setFont("helvetica", "normal");
+
+  order.items.forEach(item => {
+    const nameLines = doc.splitTextToSize(item.name, 118);
+    doc.text(nameLines, marginX, y);
+    doc.text(String(item.qty), 145, y);
+    doc.text(formatPrice(item.lineTotal), 172, y);
+    y += nameLines.length * 5 + 3;
+    if (y > 270) { doc.addPage(); y = 20; }
+  });
+
+  y += 4;
+  doc.line(marginX, y, 195, y);
+  y += 8;
+  doc.setFont("helvetica", "bold");
+  doc.text("Total: " + formatPrice(order.total), 145, y);
+
+  y += 14;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.text("This is an order confirmation, not a tax invoice. Final total confirmed with delivery cost.", marginX, y);
+
+  doc.save(order.order_number + "-invoice.pdf");
+}
+
+function attachCheckoutEvents() {
+  const form = document.getElementById("orderForm");
+  if (!form) return;
+  const items = cartLineItems();
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    if (!items.length) return;
+    const details = {
+      fullName: document.getElementById("fullName").value.trim(),
+      businessName: document.getElementById("businessName").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      address: document.getElementById("address").value.trim(),
+      notes: document.getElementById("notes").value.trim()
+    };
+    const orderNumber = generateOrderNumber();
+    const btn = document.getElementById("placeOrderBtn");
+    btn.disabled = true;
+    btn.textContent = "Placing your order...";
+
+    const orderRecord = {
+      order_number: orderNumber,
+      customer_email: details.email,
+      customer_name: details.fullName,
+      business_name: details.businessName || null,
+      phone: details.phone,
+      address: details.address,
+      notes: details.notes || null,
+      items: items.map(i => ({ id: i.product.id, name: i.product.name, qty: i.qty, price: i.product.price, lineTotal: i.lineTotal })),
+      total: cartSubtotal(),
+      created_at: new Date().toISOString()
+    };
+
+    let saved = false;
+    if (sb) {
+      const { error } = await sb.from("orders").insert(orderRecord);
+      saved = !error;
+      if (error) console.error("Order history save failed:", error.message);
+    }
+
+    downloadInvoicePDF(orderRecord);
+
+    document.getElementById("checkoutSection").style.display = "none";
+    document.getElementById("confirmSection").style.display = "block";
+    document.getElementById("confirmedOrderNumber").textContent = orderNumber;
+
+    const msgEl = document.getElementById("confirmedMessage");
+    const actionsEl = document.getElementById("confirmActions");
+    if (saved) {
+      msgEl.textContent = `Your invoice has downloaded. This order is also saved under ${details.email}, view it anytime under My Orders.`;
+      actionsEl.innerHTML = `<a href="#/orders" class="btn btn-primary">View my orders</a><a href="#/shop" class="btn btn-outline-light">Continue shopping</a>`;
+    } else {
+      const mailBody = encodeURIComponent(buildOrderBodyText(orderNumber, details, items));
+      const mailSubject = encodeURIComponent("New order " + orderNumber);
+      msgEl.textContent = "Your invoice has downloaded. We couldn't save this to order history automatically, so please email us a copy as backup.";
+      actionsEl.innerHTML = `<a href="mailto:${SITE_CONFIG.businessEmail}?subject=${mailSubject}&body=${mailBody}" class="btn btn-primary">Email us a copy</a><a href="#/shop" class="btn btn-outline-light">Continue shopping</a>`;
+    }
+    clearCart();
+  });
+}
+
+/* ---------------------------- view: MY ORDERS ---------------------------- */
+function viewOrders() {
+  return `
+  <section class="page-header">
+    <div class="wrap">
+      <h1 style="font-size:2rem;">My Orders</h1>
+      <p>Look up your past orders, download an invoice again, or repeat one as a new order.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap" id="ordersWrap">
+      <p class="small-note">Loading...</p>
+    </div>
+  </section>`;
+}
+
+async function attachOrdersEvents() {
+  const wrap = document.getElementById("ordersWrap");
+  if (!sb) {
+    wrap.innerHTML = `<div class="empty-state"><h3>Order history isn't connected yet</h3><p>This needs a Supabase project linked up before it can save or show past orders.</p></div>`;
+    return;
+  }
+  const { data: { session } } = await sb.auth.getSession();
+  if (session && session.user && session.user.email) {
+    renderOrdersList(session.user.email);
+  } else {
+    renderOrdersLogin();
+  }
+}
+
+function renderOrdersLogin() {
+  const wrap = document.getElementById("ordersWrap");
+  wrap.innerHTML = `
+    <div class="order-box" style="max-width:420px; margin:0 auto;">
+      <h3 style="margin-bottom:6px;">View your order history</h3>
+      <p class="small-note" style="margin-bottom:16px;">Enter the email you order under. We'll send a 6-digit code to confirm it's you.</p>
+      <div id="loginStep1">
+        <div class="field-row"><label for="loginEmail">Email</label><input type="email" id="loginEmail"></div>
+        <button class="btn btn-primary btn-block" id="sendCodeBtn">Send me a code</button>
+      </div>
+      <div id="loginStep2" style="display:none; margin-top:16px;">
+        <div class="field-row"><label for="loginCode">6-digit code</label><input type="text" id="loginCode" inputmode="numeric"></div>
+        <button class="btn btn-primary btn-block" id="verifyCodeBtn">Verify &amp; view orders</button>
+      </div>
+      <p class="small-note" id="loginMsg" style="margin-top:12px;"></p>
+    </div>`;
+
+  let pendingEmail = "";
+
+  document.getElementById("sendCodeBtn").addEventListener("click", async () => {
+    const email = document.getElementById("loginEmail").value.trim();
+    const msg = document.getElementById("loginMsg");
+    if (!email) return;
+    msg.textContent = "Sending code...";
+    const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+    if (error) { msg.textContent = "Couldn't send a code: " + error.message; return; }
+    pendingEmail = email;
+    document.getElementById("loginStep1").style.display = "none";
+    document.getElementById("loginStep2").style.display = "block";
+    msg.textContent = "Check your email for a 6-digit code.";
+  });
+
+  document.getElementById("verifyCodeBtn").addEventListener("click", async () => {
+    const code = document.getElementById("loginCode").value.trim();
+    const msg = document.getElementById("loginMsg");
+    if (!code) return;
+    msg.textContent = "Checking...";
+    const { error } = await sb.auth.verifyOtp({ email: pendingEmail, token: code, type: "email" });
+    if (error) { msg.textContent = "That code didn't work: " + error.message; return; }
+    renderOrdersList(pendingEmail);
+  });
+}
+
+async function renderOrdersList(email) {
+  const wrap = document.getElementById("ordersWrap");
+  wrap.innerHTML = `<p class="small-note">Loading your orders...</p>`;
+  const { data, error } = await sb.from("orders").select("*").eq("customer_email", email).order("created_at", { ascending: false });
+
+  if (error) {
+    wrap.innerHTML = `<div class="empty-state"><h3>Couldn't load your orders</h3><p>${error.message}</p></div>`;
+    return;
+  }
+  if (!data.length) {
+    wrap.innerHTML = `
+      <p class="small-note" style="margin-bottom:16px;">Signed in as ${email}. <button class="remove-link" id="signOutBtn">Sign out</button></p>
+      <div class="empty-state"><h3>No orders yet</h3><p>Orders placed under this email will show up here.</p><a href="#/shop" class="btn btn-primary">Shop all products</a></div>`;
+    document.getElementById("signOutBtn").addEventListener("click", async () => { await sb.auth.signOut(); renderOrdersLogin(); });
+    return;
+  }
+
+  wrap.innerHTML = `
+    <p class="small-note" style="margin-bottom:16px;">Signed in as ${email}. <button class="remove-link" id="signOutBtn">Sign out</button></p>
+    ${data.map((order, idx) => `
+      <div class="order-box" style="margin-bottom:16px;">
+        <div class="shop-toolbar" style="margin-bottom:10px;">
+          <div><strong>${order.order_number}</strong><br><span class="small-note">${new Date(order.created_at).toLocaleDateString()}</span></div>
+          <div style="text-align:right;"><strong>${formatPrice(order.total)}</strong><br><span class="small-note">${order.status || "pending"}</span></div>
+        </div>
+        ${order.items.map(i => `<div class="order-line"><span>${i.qty} × ${i.name}</span><span>${formatPrice(i.lineTotal)}</span></div>`).join("")}
+        <div class="pd-actions" style="margin-top:14px;">
+          <button class="btn btn-outline btn-sm reorder-btn" data-idx="${idx}">Reorder these items</button>
+          <button class="btn btn-outline btn-sm download-btn" data-idx="${idx}">Download invoice</button>
+        </div>
+      </div>`).join("")}
+  `;
+
+  document.getElementById("signOutBtn").addEventListener("click", async () => { await sb.auth.signOut(); renderOrdersLogin(); });
+  wrap.querySelectorAll(".reorder-btn").forEach(btn => btn.addEventListener("click", () => {
+    const order = data[parseInt(btn.dataset.idx, 10)];
+    order.items.forEach(i => addToCart(i.id, i.qty));
+    window.location.hash = "#/cart";
+  }));
+  wrap.querySelectorAll(".download-btn").forEach(btn => btn.addEventListener("click", () => {
+    downloadInvoicePDF(data[parseInt(btn.dataset.idx, 10)]);
+  }));
+}
+
+/* ---------------------------- view: ABOUT ---------------------------- */
+function viewAbout() {
+  return `
+  <section class="page-header">
+    <div class="wrap">
+      <h1 style="font-size:2rem;">About Us</h1>
+      <p>We built One Stop Work Shop Supply Store to solve one problem: workshops shouldn't need five suppliers to keep the bay running.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <h2>Why we started</h2>
+        <p>Every MTB and motorcycle workshop we spoke to had the same setup: one supplier for rim tape, another for sealant, a cash-and-carry run for degreaser, and a separate online order for gloves and rags. Reordering meant juggling logins, minimum order values and three different delivery schedules just to keep the basics on the shelf.</p>
+        <p>One Stop Work Shop Supply Store puts the things a workshop actually runs out of (tape, cleaning supplies, sealant and the daily essentials) behind one login, one cart and one delivery. If it's something your bay reaches for weekly, we want it stocked here.</p>
+      </div>
+      <div class="stat-block">
+        <div><b>4</b><span>collections covering the categories workshops reorder most</span></div>
+        <div><b>Bulk</b><span>sizes so busy bays aren't opening a new bottle every job</span></div>
+        <div><b>Retail</b><span>sizes so your front counter can sell direct to riders</span></div>
+      </div>
+    </div>
+  </section>
+  <section class="section section-dark">
+    <div class="wrap">
+      <div class="section-head"><div><h2>What we believe in</h2><p>The principles behind every product we choose to stock.</p></div></div>
+      <div class="cat-grid">
+        <div class="cat-card" style="background:var(--ink-soft); border-color:var(--ink-line); color:#fff;">
+          <div class="cat-icon">◍</div>
+          <h3 style="color:#fff;">Ease of use first</h3>
+          <p style="color:#c7ccd0;">If a product needs a manual to use correctly, we either simplify it or don't stock it. Workshops need things that work the way they're expected to, every time.</p>
+        </div>
+        <div class="cat-card" style="background:var(--ink-soft); border-color:var(--ink-line); color:#fff;">
+          <h3 style="color:#fff;">Stocked, not sometimes-stocked</h3>
+          <p style="color:#c7ccd0;">A supplier that's out of stock is worse than no supplier. We hold real inventory on the lines workshops can't afford to be without.</p>
+        </div>
+        <div class="cat-card" style="background:var(--ink-soft); border-color:var(--ink-line); color:#fff;">
+          <h3 style="color:#fff;">Sized for how you actually buy</h3>
+          <p style="color:#c7ccd0;">A single rider needs a 1L bottle. A four-bay workshop needs a 20L drum. We stock both instead of forcing everyone into one size.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" style="background:var(--white);">
+    <div class="wrap center">
+      <h2>Want to talk to us directly?</h2>
+      <p style="max-width:50ch; margin:0 auto 22px;">Whether it's a bulk quote, a custom delivery schedule or a product you'd like us to stock, we're happy to talk it through.</p>
+      <a href="mailto:${SITE_CONFIG.businessEmail}" class="btn btn-primary">Email the team</a>
+    </div>
+  </section>`;
+}
+
+/* ---------------------------- view: PRODUCT TESTING ---------------------------- */
+function viewTesting() {
+  return `
+  <section class="page-header">
+    <div class="wrap">
+      <h1 style="font-size:2rem;">Product Development &amp; Testing</h1>
+      <p>Every product on this site earns its place on the shelf. Here's how we decide what to stock, and what we check before it ships.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <h2>A simple standard, applied every time</h2>
+        <p>New lines don't get added because they're trending. They get added because mechanics and workshop owners keep asking for them, and because we've confirmed they hold up to daily use in a real bay, not just on a clean test bench.</p>
+        <p>The same four checks apply whether it's a $50 tool or a $2,000 bulk order of degreaser. If a product doesn't pass, it doesn't get listed.</p>
+      </div>
+      <div class="testing-highlight">
+        <b>4</b>
+        <span>checks every product goes through before it's listed</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--white); padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>How a product earns its place</h2>
+          <p>The same process, every time, in this order.</p>
+        </div>
+      </div>
+      <div class="cat-grid">
+        <div class="cat-card">
+          <div class="cat-icon testing-num">1</div>
+          <h3>Start from what workshops run out of</h3>
+          <p>New lines come from what mechanics and workshop owners actually ask for, not from what's trending. If it's not something a bay reorders regularly, it doesn't make the range.</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon testing-num">2</div>
+          <h3>Bench-test against what's on the shelf</h3>
+          <p>Every degreaser, sealant and lube is run side by side against the product it would replace, on the same bike, same grime and same conditions, before it's considered an upgrade.</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon testing-num">3</div>
+          <h3>Trial it in a real bay, not a lab</h3>
+          <p>Rim tape gets fitted and ridden. Sealant gets punctured on purpose. Degreaser gets used on an actual filthy cassette at the end of a trail day, not a clean test rig.</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon testing-num">4</div>
+          <h3>Confirm it holds up at bulk size</h3>
+          <p>A product only gets a bulk size once we've confirmed the concentrate or dilution ratio performs the same at 20L as it does at 1L. Consistency matters more once a whole bay depends on it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="wrap split">
+      <div>
+        <h2>What we're testing for</h2>
+        <p>If a product fails on ease of use, whether that's awkward dosing, confusing dilution or a nozzle that clogs, it doesn't matter how well it cleans. A workshop tool that only works in the hands of one specific mechanic isn't a workshop tool.</p>
+        <ul class="check-list">
+          <li><span class="check-mark">&check;</span><span>Does it do the job it claims to, every time it's used</span></li>
+          <li><span class="check-mark">&check;</span><span>Does it perform the same on use fifty as it did on use one</span></li>
+          <li><span class="check-mark">&check;</span><span>Is it safe on the surfaces and components a workshop actually touches</span></li>
+          <li><span class="check-mark">&check;</span><span>Can anyone in the bay pick it up and use it correctly, without a briefing</span></li>
+        </ul>
+      </div>
+      <div class="stat-block">
+        <div><b>Function</b><span>does it do what it says, every time</span></div>
+        <div><b>Consistency</b><span>same result at bottle #1 and bottle #50</span></div>
+        <div><b>Safety</b><span>safe on paint, carbon, anodising &amp; seals</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--white);">
+    <div class="wrap center">
+      <h2>Got a product you think we should stock?</h2>
+      <p style="max-width:50ch; margin:0 auto 22px;">If there's something your workshop uses daily that isn't on the site yet, tell us about it. That's exactly how new lines get added.</p>
+      <a href="mailto:${SITE_CONFIG.businessEmail}" class="btn btn-primary">Suggest a product</a>
+    </div>
+  </section>`;
+}
+
+/* ---------------------------- ROUTER ---------------------------- */
+function router() {
+  const raw = location.hash.slice(1) || "/";
+  const [path, queryString] = raw.split("?");
+  const params = new URLSearchParams(queryString || "");
+  const segments = path.split("/").filter(Boolean);
+  const view = document.getElementById("view");
+
+  if (segments.length === 0) {
+    view.innerHTML = viewHome();
+    setActiveNav("/");
+  } else if (segments[0] === "shop") {
+    view.innerHTML = viewShop(params);
+    attachShopEvents();
+    setActiveNav("/shop");
+  } else if (segments[0] === "product") {
+    view.innerHTML = viewProduct(segments[1]);
+    attachProductEvents(segments[1]);
+    setActiveNav("");
+  } else if (segments[0] === "cart") {
+    view.innerHTML = viewCart();
+    renderCartInner();
+    setActiveNav("");
+  } else if (segments[0] === "checkout") {
+    view.innerHTML = viewCheckout();
+    attachCheckoutEvents();
+    setActiveNav("");
+  } else if (segments[0] === "orders") {
+    view.innerHTML = viewOrders();
+    attachOrdersEvents();
+    setActiveNav("/orders");
+  } else if (segments[0] === "about") {
+    view.innerHTML = viewAbout();
+    setActiveNav("/about");
+  } else if (segments[0] === "testing") {
+    view.innerHTML = viewTesting();
+    setActiveNav("/testing");
+  } else {
+    view.innerHTML = `<section class="section"><div class="wrap empty-state"><h3>Page not found</h3><a href="#/" class="btn btn-primary">Back to home</a></div></section>`;
+    setActiveNav("");
+  }
+  window.scrollTo(0, 0);
+  updateCartBadge();
+}
+
+window.addEventListener("hashchange", router);
+document.addEventListener("DOMContentLoaded", () => {
+  renderChrome();
+  router();
+});
+
+</script>
+</body>
+</html>
