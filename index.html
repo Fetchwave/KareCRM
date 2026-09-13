@@ -651,18 +651,25 @@ select:focus, input:focus, textarea:focus { outline: 2px solid var(--green); bor
   ONE STOP WORK SHOP SUPPLY STORE - single-file build
   This whole site (home, shop, product pages, cart, checkout, order
   history, about, product testing) lives in this one HTML file and is
-  navigated with no page reloads. Before you publish it:
-   1. Search for SITE_CONFIG below and set your real order email.
-   2. Set SITE_CONFIG.supabaseUrl and supabaseAnonKey to turn on order
-      history (see the setup steps provided alongside this file).
-   3. Search for  image:  on any product to add/replace a real photo URL.
+  navigated with no page reloads.
+
+  ORDER HISTORY + EMAIL NOTIFICATIONS ARE LIVE:
+   - Supabase project: one-stop-work-shop-supply-store
+   - Every order is saved and an email fires to connor@fetchwave.com
+   - To actually receive that email, sign up for a free Resend account
+     (resend.com), grab an API key, and add it as a secret named
+     RESEND_API_KEY on the notify-new-order Edge Function in the
+     Supabase dashboard (Edge Functions -> notify-new-order -> Secrets).
+     Nothing else needs to change once that key is added.
+
+  STILL TO DO BEFORE FULL LAUNCH:
+   1. Search for  image:  on any product to add/replace a real photo URL.
       Rim Tapes & Tapes and Cleaning Supplies currently share ONE
       placeholder photo each across all 10 products in that collection,
-      just so you can see the layout with real images. Give every
-      product its own photo before this goes live. These placeholder
+      just so you can see the layout with real images. These placeholder
       images (and the hero banner image) are temporary links that
       expire Oct 13, 2026, replace them with permanently hosted URLs.
-   4. All prices and the reviews / stores-we-supply list are
+   2. All prices and the reviews / stores-we-supply list are
       placeholders - update before this goes live.
    This file loads the Supabase JS client and jsPDF from public CDNs,
    so it needs an internet connection to run (same as the Google Fonts).
@@ -697,9 +704,9 @@ select:focus, input:focus, textarea:focus { outline: 2px solid var(--green); bor
 
 const SITE_CONFIG = {
   businessName: "One Stop Work Shop Supply Store",
-  businessEmail: "orders@yourdomain.co.za",   // <-- set your real inbox
-  supabaseUrl: "",                             // <-- paste your Supabase project URL
-  supabaseAnonKey: "",                         // <-- paste your Supabase anon public key
+  businessEmail: "connor@fetchwave.com",       // order notification email
+  supabaseUrl: "https://wixmltlhebrtkypohmzz.supabase.co",
+  supabaseAnonKey: "sb_publishable_SFHJ-hhTMrcxsl_QZv00Jw_i6FRP3Zp",
   currencySymbol: "R",
   whatsapp: "27000000000",                     // <-- optional, digits only, country code first
   location: "Durban, South Africa",
